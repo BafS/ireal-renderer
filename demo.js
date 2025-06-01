@@ -28,8 +28,9 @@ window.addEventListener("load", async () => {
 	*/
 	function renderSong(index) {
 		var song = playlist.songs[index];
-		var r = new iRealRenderer;
-		r.parse(song);
+		var r = new iRealRenderer();
+		const parser = new iRealParser(song);
+		parser.parse(song);
 		song = r.transpose(song, options);
 		var container = document.getElementById("song-" + index);
 		container.innerHTML = `<h3>${song.title} (${song.key
