@@ -132,7 +132,7 @@ option {
 	border: 1px solid #ccc;
 	-webkit-box-shadow: 10px 10px 5px 0px rgba(204,198,204,1);
 	-moz-box-shadow: 10px 10px 5px 0px rgba(204,198,204,1);
-	box-shadow: 10px 10px 5px 0px rgba(204,198,204,1);	
+	box-shadow: 10px 10px 5px 0px rgba(204,198,204,1);
     padding: 10mm 10mm 10mm 20mm;
 }
 
@@ -147,7 +147,7 @@ option {
 		border: none;
 		-webkit-box-shadow: none;
 		-moz-box-shadow: none;
-		box-shadow: none;	
+		box-shadow: none;
 		padding: 0;
 	}
 }

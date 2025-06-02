@@ -10,7 +10,7 @@ window.addEventListener("load", async () => {
 		useH: false,
 		hilite: true
 	};
-	
+
 	function makePlaylist(text) {
 		playlist = new Playlist(text);
 		var lbHtml = "";
@@ -22,7 +22,7 @@ window.addEventListener("load", async () => {
 		document.getElementById("songs").innerHTML = lbHtml;
 		document.getElementById("chords").innerHTML = chordsHtml;
 	}
-	
+
 	/**
 	* Render a song into the container "#song-index".
 	* @param {int} index - the song index
@@ -37,9 +37,9 @@ window.addEventListener("load", async () => {
 		container.innerHTML = `<h3>${song.title} (${song.key
 			.replace(/b/g, "\u266d")
 			.replace(/#/g, "\u266f")})</h3><h5>${song.composer}</h5>`;
-		r.render(song, container, options);			
+		r.render(song, container, options);
 	}
-	
+
 	function renderSelected() {
 		var selected = document.getElementById("songs").options;
 		selected = [...selected].filter(option => option.selected).map(el => +el.value);
@@ -52,7 +52,7 @@ window.addEventListener("load", async () => {
 	}
 
 	document.getElementById("songs").addEventListener("change", () => renderSelected());
-	
+
 	document.querySelectorAll('[name="minor"]').forEach(el => {
 		el.addEventListener("click", (ev) => {
 			var mode = ev.target.id;
