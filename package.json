@@ -3,12 +3,13 @@
   "version": "1.2.0",
   "description": "An HTML5/ES6 based renderer for iReal Pro playlists",
   "main": "src/ireal-renderer.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "ava tests/*.test.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/daumling/ireal-renderer.git"
+    "url": "git+https://github.com/BafS/ireal-renderer.git"
   },
   "keywords": [
     "iReal",
@@ -20,8 +21,11 @@
     "html5",
     "es6"
   ],
-  "dependencies": {},
   "author": "Michael Daumling",
   "license": "MIT",
-  "homepage": "https://github.com/daumling/ireal-renderer#readme"
+  "homepage": "https://github.com/BafS/ireal-renderer#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "ava": "^6.3.0"
+  }
 }

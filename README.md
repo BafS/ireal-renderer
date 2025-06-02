@@ -228,3 +228,10 @@ The Playlist class is a stripped down version of
 [Florin's (aka pianosnake) ireal-reader](https://github.com/pianosnake/ireal-reader).
 
 The iRealFont is a modified extract from [Steinberg's public domain Bravura font](https://github.com/steinbergmedia/bravura).
+
+### Tests
+
+```
+npm run test
+# or bun run test
+```
