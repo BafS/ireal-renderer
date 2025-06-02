@@ -1,10 +1,8 @@
 /*
- * iRealRenderer
- *
  * Render any iReal Pro song into an HTML container element.
  */
 
-export class iRealRenderer {
+export class Renderer {
 	constructor() {
 		this.transposeFlat = [
 			"C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B",
@@ -160,7 +158,7 @@ export class iRealRenderer {
 		if (data.chord) html = this.chordHtml(data.chord);
 		for (var i = 0; i < data.bars.length; i++) {
 			let c = data.bars[i];
-			let cls = iRealRenderer.classes[c];
+			let cls = Renderer.classes[c];
 			switch(c) {
 				case '(':
 				case '[':
@@ -201,7 +199,7 @@ export class iRealRenderer {
 			note = `<irr-char class="Repeated-Figure1"></irr-char>`;
 		if (["x", "r", "n"].includes(note)) {
 			// 1-bar repeat, 2-bar repeat, and no-chord
-			note = `<irr-char class="${iRealRenderer.classes[note]}"></irr-char>`;
+			note = `<irr-char class="${Renderer.classes[note]}"></irr-char>`;
 		}
 		var sup = "";
 		switch(note[1]) {
@@ -236,7 +234,7 @@ export class iRealRenderer {
 				case 'f':	// fermata
 				case 'Q':	// coda
 				case 'S':	// segno
-					t += `<irr-annot class="${iRealRenderer.classes[annot[0]]}"></irr-annot>`; break;
+					t += `<irr-annot class="${Renderer.classes[annot[0]]}"></irr-annot>`; break;
 					break;
 				case 'T':	// measure: Txx, where T12 is 12/8
 					var m1 = annot.charCodeAt(1) - 48;
@@ -309,9 +307,9 @@ export class iRealRenderer {
 	}
 }
 
-iRealRenderer.cssPrefix = "";
+Renderer.cssPrefix = "";
 
-iRealRenderer.classes = {
+Renderer.classes = {
 	'(': "Single-Barline",
 	')': "Single-Barline",
 	'[': "Double-Barline",

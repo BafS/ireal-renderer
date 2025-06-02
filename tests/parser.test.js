@@ -1,6 +1,6 @@
 import test from 'ava';
 import fs from 'fs';
-import { iRealParser, Playlist } from '../src/ireal-parser.js';
+import { Parser, Playlist } from '../src/parser.js';
 
 /**
  * @param {string} filename
@@ -57,7 +57,7 @@ test('Parses a song', t => {
     const playlist = new Playlist(readContent('Bright Size Life.html'));
 
     var song = playlist.songs[0];
-    const parser = new iRealParser(song);
+    const parser = new Parser(song);
     parser.parse(song);
 
     // Cells with chords, annotations, comments, or spacers
@@ -94,7 +94,7 @@ test('Parses songs in a playlist', t => {
     t.is(playlist.songs.length, 4);
 
     var song = playlist.songs[3];
-    const parser = new iRealParser(song);
+    const parser = new Parser(song);
     parser.parse(song);
     t.is(playlist.songs.length, 4);
 

@@ -1,4 +1,4 @@
-export class iRealParser {
+export class Parser {
 	/**
 	 * The parser cracks up the music string at song.music into several objects,
 	 * one for each cell. iReal Pro works with rows of 16 cell each. The result
@@ -41,8 +41,8 @@ export class iRealParser {
 		text = text.trimRight();
 		while(text) {
 			var found = false;
-			for (i = 0; i < iRealParser.regExps.length; i++) {
-				var match = iRealParser.regExps[i].exec(text);
+			for (i = 0; i < Parser.regExps.length; i++) {
+				var match = Parser.regExps[i].exec(text);
 				if (match) {
 					found = true;
 					if (match.length <= 2) {
@@ -133,7 +133,7 @@ export class iRealParser {
 			over = over.substr(1);
 		var alternate = match[5] || null;
 		if (alternate) {
-			match = iRealParser.chordRegex.exec(alternate.substr(1, alternate.length-2));
+			match = Parser.chordRegex.exec(alternate.substr(1, alternate.length-2));
 			if (!match)
 				alternate = null;
 			else
@@ -187,16 +187,16 @@ class iRealChord {
  * 5 - the top chord as (chord)
  * @type RegExp
  */
-iRealParser.chordRegex = /^([A-Gxnr][b#]?)((?:sus|alt|add|[\+\-\^\dhob#])*)(\*.+?\*)*(\/[A-G][#b]?)?(\(.*?\))?/;
-iRealParser.chordRegex2 = /^([ Wp])()()(\/[A-G][#b]?)?(\(.*?\))?/;	// need the empty captures to match chordRegex
+Parser.chordRegex = /^([A-Gxnr][b#]?)((?:sus|alt|add|[\+\-\^\dhob#])*)(\*.+?\*)*(\/[A-G][#b]?)?(\(.*?\))?/;
+Parser.chordRegex2 = /^([ Wp])()()(\/[A-G][#b]?)?(\(.*?\))?/;	// need the empty captures to match chordRegex
 
-iRealParser.regExps = [
+Parser.regExps = [
 	/^\*[a-zA-Z]/,							// section
 	/^T\d\d/,								// time measurement
 	/^N./,									// repeat marker
 	/^<.*?>/,								// comments
-	iRealParser.chordRegex,				    // chords
-	iRealParser.chordRegex2,				// space, W and p (with optional alt chord)
+	Parser.chordRegex,				        // chords
+	Parser.chordRegex2,				        // space, W and p (with optional alt chord)
 ];
 
 /**
