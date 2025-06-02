@@ -72,7 +72,7 @@ export class Parser {
 		var prevobj = null;
 		for (i = 0; i < arr.length; i++) {
 			var token = arr[i];
-			if (token instanceof Array) {
+			if (Array.isArray(token)) {
 				obj.chord = this.parseChord(token);
 				token = " ";
 			}
@@ -212,9 +212,9 @@ Parser.regExps = [
 
 export class Playlist {
 	constructor(data) {
-		let percentEncoded = /.*?irealb:\/\/([^"]*)/.exec(data);
-		let percentDecoded = decodeURIComponent(percentEncoded[1]);
-		let parts = percentDecoded.split("===");  //songs are separated by ===
+		const percentEncoded = /.*?irealb:\/\/([^"]*)/.exec(data);
+		const percentDecoded = decodeURIComponent(percentEncoded[1]);
+		const parts = percentDecoded.split("===");  //songs are separated by ===
 		if (parts.length > 1) this.name = parts.pop();  //playlist name
 		this.songs = parts.map(x => new Song(x));
 	}
@@ -236,11 +236,11 @@ export class Song {
 			return;
 		}
 		let parts = data.split("="); //split on one sign, remove the blanks
-		let musicPrefix = "1r34LbKcu7";
+		const musicPrefix = "1r34LbKcu7";
 		this.title = parts[0];
 		const composerSplit = parts[1].split(" ");
 		//fixes composer name order reversed for 2-word names
-		this.composer = composerSplit.length == 2 ? `${composerSplit[1]} ${composerSplit[0]}` : parts[1];
+		this.composer = composerSplit.length === 2 ? `${composerSplit[1]} ${composerSplit[0]}` : parts[1];
 		this.style = parts[3];
 		this.key = parts[4];
 		this.transpose = +parts[5] || 0;
@@ -271,7 +271,7 @@ export class Song {
 
 	obfusc50(s) {
 		//the first 5 characters are switched with the last 5
-		let newString = s.split('');
+		const newString = s.split('');
 		for(let i = 0; i < 5; i++){
 			newString[49 - i] = s[i];
 			newString[i] = s[49 - i];

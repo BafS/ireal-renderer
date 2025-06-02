@@ -157,8 +157,8 @@ export class Renderer {
 		let html = "";
 		if (data.chord) html = this.chordHtml(data.chord);
 		for (var i = 0; i < data.bars.length; i++) {
-			let c = data.bars[i];
-			let cls = Renderer.classes[c];
+			const c = data.bars[i];
+			const cls = Renderer.classes[c];
 			switch(c) {
 				case '(':
 				case '[':
@@ -234,7 +234,7 @@ export class Renderer {
 				case 'f':	// fermata
 				case 'Q':	// coda
 				case 'S':	// segno
-					t += `<irr-annot class="${Renderer.classes[annot[0]]}"></irr-annot>`; break;
+					t += `<irr-annot class="${Renderer.classes[annot[0]]}"></irr-annot>`;
 					break;
 				case 'T':	// measure: Txx, where T12 is 12/8
 					var m1 = annot.charCodeAt(1) - 48;
@@ -256,7 +256,7 @@ export class Renderer {
 	commentHtml(comments) {
 		var cell = this.cells[this.cell];
 		var style = getComputedStyle(cell);
-		var top = parseInt(style.height) + parseInt(style["margin-top"]);
+		var top = Number.parseInt(style.height) + Number.parseInt(style["margin-top"]);
 		var html = "";
 		for (var i = 0; i < comments.length; i++) {
 			var c = comments[i];
@@ -300,7 +300,7 @@ export class Renderer {
 			return;
 		if (!this.closebar)
 			return;
-		let curCell = this.cells[this.cell];
+		const curCell = this.cells[this.cell];
 		var bar = document.createElement("irr-rbar");
 		bar.classList.add("Single-Barline");
 		curCell.insertBefore(bar, curCell.firstChild);	// must insert, not append, for correct positioning
