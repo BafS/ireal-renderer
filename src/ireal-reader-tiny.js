@@ -9,8 +9,8 @@
  * playlist.
  */
 
-class Playlist {
-	constructor(data){
+export class Playlist {
+	constructor(data) {
 		let percentEncoded = /.*?irealb:\/\/([^"]*)/.exec(data);
 		let percentDecoded = decodeURIComponent(percentEncoded[1]);
 		let parts = percentDecoded.split("===");  //songs are separated by ===
@@ -19,7 +19,7 @@ class Playlist {
 	}
 }
 
-class Song {
+export class Song {
 	constructor(data) {
 		this.cells = [];
 		if (!data) {

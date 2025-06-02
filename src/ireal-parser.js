@@ -1,4 +1,4 @@
-class iRealParser {
+export class iRealParser {
 	/**
 	 * The parser cracks up the music string at song.music into several objects, 
 	 * one for each cell. iReal Pro works with rows of 16 cell each. The result
