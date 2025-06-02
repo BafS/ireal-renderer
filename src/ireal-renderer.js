@@ -1,6 +1,6 @@
-/* 
+/*
  * iRealRenderer
- * 
+ *
  * Render any iReal Pro song into an HTML container element.
  */
 
@@ -20,13 +20,13 @@ export class iRealRenderer {
 		// already created as a web component. For now, just ignore the setting.
 		this.isComponent = false;
 	}
-	
+
 	////////////////////////////////////////////////////////////////////////////
 
 	/**
 	 * Transpose a song. Use the following options:
-	 * 
-	 * transpose: 
+	 *
+	 * transpose:
 	 *   a value between -6 and 15 as halftones
 	 * minor:
 	 *   small - convert Bb- to bb
@@ -58,7 +58,7 @@ export class iRealRenderer {
 		options.transpose -= song.transpose;
 		return song;
 	}
-		
+
 	/**
 	 * Transpose the given chord; use the given options.
 	 * @param {Object} chord
@@ -99,9 +99,9 @@ export class iRealRenderer {
 		if (chord.over)
 			this.transposeChord(chord.over, options);
 	}
-	
+
 	////////////////////////////////////////////////////////////////////////////
-	
+
 	/**
 	 * Render the parsed array.
 	 * @param {Song} song - with attached cells property
@@ -125,7 +125,7 @@ export class iRealRenderer {
 		this.closebar = false;
 		this.small = false;
 		this.hilite = hilite;
-		
+
 		for (var i = 0; i < song.cells.length; i++) {
 			var cell = song.cells[i];
 			if (this.cell < 0 || this.cell === 15)
@@ -150,11 +150,11 @@ export class iRealRenderer {
 			this.closebar = cell.bars.indexOf(')') >= 0;
 		}
 	}
-	
+
 	////////////////////////////////////////////////////////////////////////////
-	
+
 	// Private methods
-	
+
 	cellHtml(data) {
 		let html = "";
 		if (data.chord) html = this.chordHtml(data.chord);
@@ -177,7 +177,7 @@ export class iRealRenderer {
 			return html;
 		return `<irr-chord>${html}</irr-chord>`;
 	}
-		
+
 	chordHtml(chord) {
 		if (typeof chord === "string") {
 			chord = iRealParser.chordRegex.exec(chord);
@@ -188,11 +188,11 @@ export class iRealRenderer {
 		var { alternate, over } = chord;
 		if (over)
 			html += `<irr-over>${this.baseChordHtml(over)}</irr-over>`;
-		if (alternate) 
+		if (alternate)
 			html = `<irr-chord>${this.chordHtml(alternate)}</irr-chord>` + html;
 		return html;
 	}
-	
+
 	baseChordHtml(chord) {
 		var { note, modifiers } = chord;
 		if (note === "W")
@@ -212,7 +212,7 @@ export class iRealRenderer {
 			modifiers = `<sub>${modifiers.replace("^", "\u25B3").replace("h", "\u00D8")}</sub>`;
 		return `${note}${sup}${modifiers}`;
 	}
-	
+
 	/**
 	 * Render an annotation.
 	 * @param {type} annots
@@ -254,7 +254,7 @@ export class iRealRenderer {
 		}
 		return t;
 	}
-	
+
 	commentHtml(comments) {
 		var cell = this.cells[this.cell];
 		var style = getComputedStyle(cell);
@@ -273,7 +273,7 @@ export class iRealRenderer {
 		}
 		return html;
 	}
-	
+
 	nextRow(table, spacer) {
 		this.checkIfNeedsLastBar();
 		// insert a spacer
@@ -288,7 +288,7 @@ export class iRealRenderer {
 			this.cells.push(cell);
 			table.appendChild(cell);
 		}
-		
+
 		this.cell = 0;
 	}
 

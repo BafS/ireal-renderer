@@ -1,16 +1,16 @@
 export class iRealParser {
 	/**
-	 * The parser cracks up the music string at song.music into several objects, 
+	 * The parser cracks up the music string at song.music into several objects,
 	 * one for each cell. iReal Pro works with rows of 16 cell each. The result
 	 * is stored at song.cells.
-	 * 
+	 *
 	 * Each object has the following properties:
 	 *
 	 * chord: if non-null, a chord object with these properties:
 	 *   note      - the base note (also blank, W = invisible root, p/x/r - pause/bar repeat/double-bar repeat, n - no chord)
 	 *   modifiers - the modifiers, like 7, + o etc (string)
 	 *   over      - if non-null, another chord object for the under-note
-	 *   alternate - if non-null another chord object for the alternate chord 
+	 *   alternate - if non-null another chord object for the alternate chord
 	 * annots: annotations, a string of:
 	 *  *x  - section, like *v, *I, *A, *B etc
 	 *  Nx  - repeat bots (N1, N2 etc)
@@ -30,7 +30,7 @@ export class iRealParser {
 	 *  } - repeat bar, right
 	 *  Z - end bar, right
 	 * spacer - a number indicating the number of vertical spacers above this cell
-	 * 
+	 *
 	 * @param {Song} song
 	 * @returns {undefined}
 	 */
@@ -107,9 +107,9 @@ export class iRealParser {
 				case 'W':
 					obj.chord = new iRealChord(token);
 					break;
-				case '<': 
+				case '<':
 					token = token.substr(1, token.length-2);
-					obj.comments.push(token); 
+					obj.comments.push(token);
 					token = null; break;
 				default:
 			}
@@ -137,7 +137,7 @@ export class iRealParser {
 			if (!match)
 				alternate = null;
 			else
-				alternate = this.parseChord(match);			
+				alternate = this.parseChord(match);
 		}
 		// empty cell?
 		if (note === " " && !alternate && !over)
@@ -200,10 +200,10 @@ iRealParser.regExps = [
 ];
 
 /**
- * The Playlist and Song instances are derivates from 
- * 
+ * The Playlist and Song instances are derivates from
+ *
  * https://github.com/pianosnake/ireal-reader
- * 
+ *
  * The Song instance has been modified slightly, mostly to exclude the parsing
  * music into single notes. The constructor accepts the content of a iReal Pro
  * HTML file and fills its "songs" property with all songs found in that
@@ -239,7 +239,7 @@ export class Song {
 		let musicPrefix = "1r34LbKcu7";
 		this.title = parts[0];
 		const composerSplit = parts[1].split(" ");
-		//fixes composer name order reversed for 2-word names    
+		//fixes composer name order reversed for 2-word names
 		this.composer = composerSplit.length == 2 ? `${composerSplit[1]} ${composerSplit[0]}` : parts[1];
 		this.style = parts[3];
 		this.key = parts[4];
