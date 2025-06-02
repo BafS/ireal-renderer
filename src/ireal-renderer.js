@@ -360,7 +360,3 @@ iRealRenderer.classes = {
 	"11H": "Measure-11-High",
 	"12H": "Measure-12-High"
 };
-
-if (typeof module !== "undefined") {
-	module.exports = { iRealRenderer, Playlist: require("./ireal-reader-tiny.js") };
-}
