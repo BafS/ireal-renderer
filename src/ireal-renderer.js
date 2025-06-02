@@ -4,7 +4,7 @@
  * Render any iReal Pro song into an HTML container element.
  */
 
-class iRealRenderer {
+export class iRealRenderer {
 	constructor() {
 		this.transposeFlat = [
 			"C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B",

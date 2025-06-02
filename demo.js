@@ -1,4 +1,6 @@
-// global document, window
+import { iRealRenderer } from './src/ireal-renderer.js';
+import { iRealParser } from './src/ireal-parser.js';
+import { Playlist } from './src/ireal-reader-tiny.js';
 
 window.addEventListener("load", async () => {
 
