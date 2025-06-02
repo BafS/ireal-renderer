@@ -1,5 +1,5 @@
-import { iRealRenderer } from './src/ireal-renderer.js';
-import { iRealParser, Playlist } from './src/ireal-parser.js';
+import { Renderer } from './src/renderer.js';
+import { Parser, Playlist } from './src/parser.js';
 
 window.addEventListener("load", async () => {
 
@@ -29,8 +29,8 @@ window.addEventListener("load", async () => {
 	*/
 	function renderSong(index) {
 		var song = playlist.songs[index];
-		var r = new iRealRenderer();
-		const parser = new iRealParser(song);
+		var r = new Renderer();
+		const parser = new Parser(song);
 		parser.parse(song);
 		song = r.transpose(song, options);
 		var container = document.getElementById("song-" + index);

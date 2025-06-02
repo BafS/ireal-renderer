@@ -3,3 +3,5 @@ node_modules/
 /src/irr-chords.html
 Gemfile*
 _site/**
+.node-version
+.DS_Store
