@@ -1,5 +1,6 @@
-import { Renderer } from './src/renderer.js';
-import { Parser, Playlist } from './src/parser.js';
+import demoPlaylist from '../DemoPlaylist.html?raw'
+import { Renderer } from './renderer.js';
+import { Parser, Playlist } from './parser.js';
 
 window.addEventListener("load", async () => {
 
@@ -28,12 +29,12 @@ window.addEventListener("load", async () => {
 	* @param {int} index - the song index
 	*/
 	function renderSong(index) {
-		var song = playlist.songs[index];
-		var r = new Renderer();
+		let song = playlist.songs[index];
+		let r = new Renderer();
 		const parser = new Parser(song);
 		parser.parse(song);
 		song = r.transpose(song, options);
-		var container = document.getElementById("song-" + index);
+		let container = document.getElementById("song-" + index);
 		container.innerHTML = `<h3>${song.title} (${song.key
 			.replace(/b/g, "\u266d")
 			.replace(/#/g, "\u266f")})</h3><h5>${song.composer}</h5>`;
@@ -41,9 +42,9 @@ window.addEventListener("load", async () => {
 	}
 
 	function renderSelected() {
-		var selected = document.getElementById("songs").options;
+		let selected = document.getElementById("songs").options;
 		selected = [...selected].filter(option => option.selected).map(el => +el.value);
-		for (var i = 0; i < playlist.songs.length; i++) {
+		for (let i = 0; i < playlist.songs.length; i++) {
 			if (selected.includes(i))
 				renderSong(i);
 			else
@@ -55,7 +56,7 @@ window.addEventListener("load", async () => {
 
 	document.querySelectorAll('[name="minor"]').forEach(el => {
 		el.addEventListener("click", (ev) => {
-			var mode = ev.target.id;
+			let mode = ev.target.id;
 			options.minor = mode;
 			renderSelected();
 		});
@@ -88,8 +89,8 @@ window.addEventListener("load", async () => {
 	});
 
 	document.getElementById("ui-file").addEventListener("change", ev => {
-		var f = ev.target.files[0];
-		var reader = new FileReader();
+		let f = ev.target.files[0];
+		let reader = new FileReader();
 		reader.addEventListener("loadend", () => {
 			if (reader.error)
 				alert(`Cannot read file ${f.name}: ${reader.error}`);
@@ -100,13 +101,10 @@ window.addEventListener("load", async () => {
 	});
 
 	// Did the import of our DemoPlaylist.html file work?
-	var el = document.querySelectorAll('link[rel="import"]');
+	let el = document.querySelectorAll('link[rel="import"]');
 	if (el.length)
 		makePlaylist(el[0].import.body.innerHTML);
 	else {
-		// If not, try to load via fetch()
-		var response = await fetch("DemoPlaylist.html");
-		if (response.ok)
-				makePlaylist(await response.text());
-		}
+		makePlaylist(demoPlaylist);
+  }
 });

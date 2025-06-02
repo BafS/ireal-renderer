@@ -5,6 +5,9 @@
   "main": "src/ireal-renderer.js",
   "type": "module",
   "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
     "test": "ava tests/*.test.js",
     "lint": "biome lint --skip=style src/"
   },
@@ -28,6 +31,7 @@
   "dependencies": {},
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
-    "ava": "^6.3.0"
+    "ava": "^6.3.0",
+    "vite": "^6.3.5"
   }
 }
