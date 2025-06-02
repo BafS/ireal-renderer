@@ -5,7 +5,8 @@
   "main": "src/ireal-renderer.js",
   "type": "module",
   "scripts": {
-    "test": "ava tests/*.test.js"
+    "test": "ava tests/*.test.js",
+    "lint": "biome lint --skip=style src/"
   },
   "repository": {
     "type": "git",
@@ -26,6 +27,7 @@
   "homepage": "https://github.com/BafS/ireal-renderer#readme",
   "dependencies": {},
   "devDependencies": {
+    "@biomejs/biome": "1.9.4",
     "ava": "^6.3.0"
   }
 }
