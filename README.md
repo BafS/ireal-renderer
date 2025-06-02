@@ -95,6 +95,28 @@ function renderSong(playlist, index, container) {
 }
 ```
 
+### Dev
+
+```
+npm run dev
+# or bun run dev
+```
+
+### Build
+
+```
+npm run build
+# or bun run build
+```
+
+### Tests
+
+```
+npm run test
+# or bun run test
+```
+
+
 ### Demos
 
 The `demo` folder contains the Web version. Launch `index.html` to see the demo.
@@ -228,10 +250,3 @@ The Playlist class is a stripped down version of
 [Florin's (aka pianosnake) ireal-reader](https://github.com/pianosnake/ireal-reader).
 
 The iRealFont is a modified extract from [Steinberg's public domain Bravura font](https://github.com/steinbergmedia/bravura).
-
-### Tests
-
-```
-npm run test
-# or bun run test
-```

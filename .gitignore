@@ -5,3 +5,4 @@ Gemfile*
 _site/**
 .node-version
 .DS_Store
+dist/
