@@ -320,7 +320,7 @@ export class Transposer {
 	 * useH:
 	 *   use H for B chords
 	 * @param {Song} song
-	 * @param {Object<string, any>} options
+	 * @param {{transpose: number, minor: 'm'|'small', useH: boolean}} options
 	 * @returns {Song}
 	 */
 	transpose(song, options) {
@@ -364,8 +364,9 @@ export class Transposer {
 			if (i < 0)
 				i += 12;
 			chordCopy.note = arr[i];
-			if (options.useH && chordCopy.note === "B")
+			if (options.useH && chordCopy.note === "B") {
 				chordCopy.note = "H";
+			}
 		}
 		if (chordCopy.modifiers.includes("-")) {
 			switch (options.minor) {

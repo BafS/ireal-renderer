@@ -1,11 +1,11 @@
 import demoPlaylist from '../DemoPlaylist.html?raw'
 import { Renderer, Transposer } from './renderer.js';
-import { Parser, Playlist } from './parser.js';
+import { Playlist } from './parser.js';
 
 window.addEventListener("load", async () => {
 
-	var playlist;
-	var options = {
+	let playlist;
+	let options = {
 		minor: "minus",
 		transpose: 0,
 		useH: false,
@@ -14,9 +14,9 @@ window.addEventListener("load", async () => {
 
 	function makePlaylist(text) {
 		playlist = new Playlist(text);
-		var lbHtml = "";
-		var chordsHtml = "";
-		for (var i = 0; i < playlist.songs.length; i++) {
+		let lbHtml = "";
+		let chordsHtml = "";
+		for (let i = 0; i < playlist.songs.length; i++) {
 			lbHtml += `<option value="${i}">${playlist.songs[i].title}</option>`;
 			chordsHtml += `<div id="song-${i}"></div>`;
 		}
@@ -29,16 +29,13 @@ window.addEventListener("load", async () => {
 	* @param {int} index - the song index
 	*/
 	function renderSong(index) {
-		let song = playlist.songs[index];
-		let r = new Renderer();
-		const parser = new Parser(song);
 		const transpose = new Transposer();
-		parser.parse(song);
-		song = transpose.transpose(song, options);
-		let container = document.getElementById("song-" + index);
+		const song = transpose.transpose(playlist.songs[index], options);
+		const container = document.getElementById("song-" + index);
 		container.innerHTML = `<h3>${song.title} (${song.key
 			.replace(/b/g, "\u266d")
 			.replace(/#/g, "\u266f")})</h3><h5>${song.composer}</h5>`;
+		const r = new Renderer();
 		r.render(song, container, options);
 	}
 
