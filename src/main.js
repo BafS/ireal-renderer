@@ -1,5 +1,5 @@
 import demoPlaylist from '../DemoPlaylist.html?raw'
-import { Renderer } from './renderer.js';
+import { Renderer, Transposer } from './renderer.js';
 import { Parser, Playlist } from './parser.js';
 
 window.addEventListener("load", async () => {
@@ -32,8 +32,9 @@ window.addEventListener("load", async () => {
 		let song = playlist.songs[index];
 		let r = new Renderer();
 		const parser = new Parser(song);
+		const transpose = new Transposer();
 		parser.parse(song);
-		song = r.transpose(song, options);
+		song = transpose.transpose(song, options);
 		let container = document.getElementById("song-" + index);
 		container.innerHTML = `<h3>${song.title} (${song.key
 			.replace(/b/g, "\u266d")

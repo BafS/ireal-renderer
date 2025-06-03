@@ -38,7 +38,7 @@ export class Parser {
 		var text = song.music;
 		var arr = [], headers = [], comments = [];
 		var i;
-		text = text.trimRight();
+		text = text.trimEnd();
 		while(text) {
 			var found = false;
 			for (i = 0; i < Parser.regExps.length; i++) {
