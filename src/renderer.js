@@ -1,17 +1,14 @@
+/**
+ * @typedef {{title: string, cells: Cell[], key: string, composer: string, transpose: number, bpm: number, repeats: number, style: string, exStyle: string, music: string|null}} Song
+ * @typedef {{annots: [], comments: [], spacer: number, bars: string, chord: Chord|null, comments: string[]}} Cell
+ * @typedef {{note: string, modifiers: string, alternate: Chord|null, over: Chord|null}} Chord
+ */
+
 /*
  * Render any iReal Pro song into an HTML container element.
  */
-
 export class Renderer {
 	constructor() {
-		this.transposeFlat = [
-			"C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B",
-			"C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"
-		];
-		this.transposeSharp = [
-			"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B",
-			"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"
-		];
 		this.cells = [];
 		// This is set to true if the renderer is to render as a web component.
 		// It inhibits the creation of a <irr-chords>tag because the tag is
@@ -19,93 +16,11 @@ export class Renderer {
 		this.isComponent = false;
 	}
 
-	////////////////////////////////////////////////////////////////////////////
-
-	/**
-	 * Transpose a song. Use the following options:
-	 *
-	 * transpose:
-	 *   a value between -6 and 15 as halftones
-	 * minor:
-	 *   small - convert Bb- to bb
-	 *   m     - convert Bb- to Bbm
-	 * useH:
-	 *   use H for B chords
-	 * @param {type} song
-	 * @param {type} options
-	 * @returns {undefined}
-	 */
-	transpose(song, options) {
-		song = Object.assign({}, song);
-		if (song.cells)
-			song.cells = song.cells.slice(0);
-		var chord = { note: song.key, modifiers:"", over: null, alternate: null };
-		if (chord.note.endsWith("-")) {
-			chord.note = song.key.substr(0, song.key.length-1);
-			chord.modifiers = "-";
-		}
-		options.transpose += song.transpose;
-		this.transposeChord(chord, options);
-		song.key = chord.note + chord.modifiers;
-		if (song.cells)
-			song.cells = song.cells.map(el => {
-				if (el.chord)
-					this.transposeChord(el.chord, options);
-				return el;
-			});
-		options.transpose -= song.transpose;
-		return song;
-	}
-
-	/**
-	 * Transpose the given chord; use the given options.
-	 * @param {Object} chord
-	 * @param {Object} options
-	 * @returns {String}
-	 */
-	transposeChord(chord, options) {
-		var arr = this.transposeFlat;
-		var i = arr.indexOf(chord.note);
-		if (i < 0) {
-			arr = this.transposeSharp;
-			i = arr.indexOf(chord.note);
-		}
-		if (i >= 0) {
-			i += (options.transpose % 12);
-			if (i < 0)
-				i += 12;
-			chord.note = arr[i];
-			if (options.useH && chord.note === "B")
-				chord.note = "H";
-		}
-		if (chord.modifiers.includes("-")) {
-			switch (options.minor) {
-				case "small":
-					var note = chord.note[0].toLowerCase();
-					if (chord.note[1])
-						note += chord.note[1];
-					chord.note = note;
-					chord.modifiers = chord.modifiers.replace("-", "");
-					break;
-				case "m":
-					chord.modifiers = chord.modifiers.replace("-", "m");
-					break;
-			}
-		}
-		if (chord.alternate)
-			this.transposeChord(chord.alternate, options);
-		if (chord.over)
-			this.transposeChord(chord.over, options);
-	}
-
-	////////////////////////////////////////////////////////////////////////////
-
 	/**
 	 * Render the parsed array.
 	 * @param {Song} song - with attached cells property
 	 * @param {Element} container - HTML container element to render into (appends)
-	 * @param {Object} options - render annots, comments etc in red if hilite property is set
-	 * @returns {undefined}
+	 * @param {Object<string, any>} options - render annots, comments etc in red if hilite property is set
 	 */
 	render(song, container, options = {}) {
 		if (!song.cells)
@@ -149,10 +64,11 @@ export class Renderer {
 		}
 	}
 
-	////////////////////////////////////////////////////////////////////////////
-
-	// Private methods
-
+	/**
+	 * @private
+	 * @param {Cell} data
+	 * @returns {string}
+	 */
 	cellHtml(data) {
 		let html = "";
 		if (data.chord) html = this.chordHtml(data.chord);
@@ -176,14 +92,19 @@ export class Renderer {
 		return `<irr-chord>${html}</irr-chord>`;
 	}
 
+	/**
+	 * @private
+	 * @param {Chord} chord
+	 * @returns {string}
+	 */
 	chordHtml(chord) {
 		if (typeof chord === "string") {
-			chord = iRealParser.chordRegex.exec(chord);
+			chord = Parser.chordRegex.exec(chord);
 			if (!chord)
 				return;
 		}
-		var html = this.baseChordHtml(chord);
-		var { alternate, over } = chord;
+		let html = this.baseChordHtml(chord);
+		const { alternate, over } = chord;
 		if (over)
 			html += `<irr-over>${this.baseChordHtml(over)}</irr-over>`;
 		if (alternate)
@@ -191,8 +112,13 @@ export class Renderer {
 		return html;
 	}
 
+	/**
+	 * @private
+	 * @param {Chord} chord
+	 * @returns {string}
+	 */
 	baseChordHtml(chord) {
-		var { note, modifiers } = chord;
+		let { note, modifiers } = chord;
 		if (note === "W")
 			note = `<irr-char class="irr-root Root"></irr-char>`;
 		if (note === "p")
@@ -201,7 +127,7 @@ export class Renderer {
 			// 1-bar repeat, 2-bar repeat, and no-chord
 			note = `<irr-char class="${Renderer.classes[note]}"></irr-char>`;
 		}
-		var sup = "";
+		let sup = "";
 		switch(note[1]) {
 			case 'b': sup = "<sup>\u266d</sup>"; note = note[0]; break;
 			case '#': sup = "<sup>\u266f</sup>"; note = note[0]; break;
@@ -213,14 +139,15 @@ export class Renderer {
 
 	/**
 	 * Render an annotation.
-	 * @param {type} annots
-	 * @returns {undefined}
+	 * @private
+	 * @param {string[]} annots
+	 * @returns {string}
 	 */
 	annotHtml(annots) {
-		var t = "";
-		for (var i = 0; i < annots.length; i++) {
-			var annot = annots[i];
-			var s;
+		let t = "";
+		for (let i = 0; i < annots.length; i++) {
+			let annot = annots[i];
+			let s;
 			switch(annot[0]) {
 				case '*':	// section
 					s = annot[1];
@@ -253,14 +180,19 @@ export class Renderer {
 		return t;
 	}
 
+	/**
+	 * @private
+	 * @param {string[]} comments
+	 * @returns {string}
+	 */
 	commentHtml(comments) {
-		var cell = this.cells[this.cell];
-		var style = getComputedStyle(cell);
-		var top = Number.parseInt(style.height) + Number.parseInt(style["margin-top"]);
-		var html = "";
-		for (var i = 0; i < comments.length; i++) {
-			var c = comments[i];
-			var offset = 0;
+		let cell = this.cells[this.cell];
+		let style = getComputedStyle(cell);
+		let top = Number.parseInt(style.height) + Number.parseInt(style["margin-top"]);
+		let html = "";
+		for (let i = 0; i < comments.length; i++) {
+			let c = comments[i];
+			let offset = 0;
 			if (c[0] === '*') {
 				offset = (c.charCodeAt(1) - 48) * 10 + (c.charCodeAt(2) - 48);
 				c = c.substr(3);
@@ -272,6 +204,11 @@ export class Renderer {
 		return html;
 	}
 
+	/**
+	 * @private
+	 * @param {HTMLElement} table
+	 * @param {number} spacer
+	 */
 	nextRow(table, spacer) {
 		this.checkIfNeedsLastBar();
 		// insert a spacer
@@ -294,6 +231,7 @@ export class Renderer {
 	 * Check if the current cell is the last cell of a row, and if it
 	 * needs a closing bar. This is true if there has been an opening
 	 * bar in the last 4 cells.
+	 * @private
 	 */
 	checkIfNeedsLastBar() {
 		if (this.cell !== 15)
@@ -358,3 +296,93 @@ Renderer.classes = {
 	"11H": "Measure-11-High",
 	"12H": "Measure-12-High"
 };
+
+export class Transposer {
+	constructor() {
+		this.transposeFlat = [
+			"C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B",
+			"C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"
+		];
+		this.transposeSharp = [
+			"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B",
+			"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"
+		];
+	}
+
+	/**
+	 * Transpose a song. Use the following options:
+	 *
+	 * transpose:
+	 *   a value between -6 and 15 as halftones
+	 * minor:
+	 *   small - convert Bb- to bb
+	 *   m     - convert Bb- to Bbm
+	 * useH:
+	 *   use H for B chords
+	 * @param {Song} song
+	 * @param {Object<string, any>} options
+	 * @returns {Song}
+	 */
+	transpose(song, options) {
+		song = Object.assign({}, song);
+		if (song.cells)
+			song.cells = song.cells.slice(0);
+		var chord = { note: song.key, modifiers:"", over: null, alternate: null };
+		if (chord.note.endsWith("-")) {
+			chord.note = song.key.substr(0, song.key.length-1);
+			chord.modifiers = "-";
+		}
+		options.transpose += song.transpose;
+		this.transposeChord(chord, options);
+		song.key = chord.note + chord.modifiers;
+		if (song.cells)
+			song.cells = song.cells.map(el => {
+				if (el.chord)
+					this.transposeChord(el.chord, options);
+				return el;
+			});
+		options.transpose -= song.transpose;
+		return song;
+	}
+
+	/**
+	 * Transpose the given chord; use the given options.
+	 * @param {Chord} chord
+	 * @param {Object<string, any>} options
+	 * @returns {string}
+	 */
+	transposeChord(chord, options) {
+		let arr = this.transposeFlat;
+		let i = arr.indexOf(chord.note);
+		if (i < 0) {
+			arr = this.transposeSharp;
+			i = arr.indexOf(chord.note);
+		}
+		if (i >= 0) {
+			i += (options.transpose % 12);
+			if (i < 0)
+				i += 12;
+			chord.note = arr[i];
+			if (options.useH && chord.note === "B")
+				chord.note = "H";
+		}
+		if (chord.modifiers.includes("-")) {
+			switch (options.minor) {
+				case "small":
+					let note = chord.note[0].toLowerCase();
+					if (chord.note[1])
+						note += chord.note[1];
+					chord.note = note;
+					chord.modifiers = chord.modifiers.replace("-", "");
+					break;
+				case "m":
+					chord.modifiers = chord.modifiers.replace("-", "m");
+					break;
+			}
+		}
+		if (chord.alternate)
+			this.transposeChord(chord.alternate, options);
+		if (chord.over)
+			this.transposeChord(chord.over, options);
+	}
+}
