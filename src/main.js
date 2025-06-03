@@ -54,13 +54,14 @@ window.addEventListener("load", async () => {
 
 	document.getElementById("songs").addEventListener("change", () => renderSelected());
 
-	document.querySelectorAll('[name="minor"]').forEach(el => {
-		el.addEventListener("click", (ev) => {
+	const minorElements = document.querySelectorAll('[name="minor"]');
+	for (let i = 0; i < minorElements.length; i++) {
+		minorElements[i].addEventListener("click", (ev) => {
 			let mode = ev.target.id;
 			options.minor = mode;
 			renderSelected();
 		});
-	});
+	}
 
 	document.getElementById("ui-useh").addEventListener("click", ev => {
 		options.useH = ev.target.checked;
