@@ -324,65 +324,67 @@ export class Transposer {
 	 * @returns {Song}
 	 */
 	transpose(song, options) {
-		song = Object.assign({}, song);
-		if (song.cells)
-			song.cells = song.cells.slice(0);
-		var chord = { note: song.key, modifiers:"", over: null, alternate: null };
+		const songCopy = {...song};
+		let chord = { note: songCopy.key, modifiers: "", over: null, alternate: null };
 		if (chord.note.endsWith("-")) {
-			chord.note = song.key.substr(0, song.key.length-1);
+			chord.note = songCopy.key.substr(0, songCopy.key.length-1);
 			chord.modifiers = "-";
 		}
 		options.transpose += song.transpose;
-		this.transposeChord(chord, options);
-		song.key = chord.note + chord.modifiers;
-		if (song.cells)
-			song.cells = song.cells.map(el => {
-				if (el.chord)
-					this.transposeChord(el.chord, options);
-				return el;
+		chord = this.transposeChord(chord, options);
+		songCopy.key = chord.note + chord.modifiers;
+		if (song.cells) {
+			songCopy.cells = song.cells.map(cell => {
+				if (cell.chord) {
+					return {...cell, chord: this.transposeChord(cell.chord, options)};
+				}
+				return cell;
 			});
+		}
 		options.transpose -= song.transpose;
-		return song;
+		return songCopy;
 	}
 
 	/**
 	 * Transpose the given chord; use the given options.
 	 * @param {Chord} chord
 	 * @param {Object<string, any>} options
-	 * @returns {string}
+	 * @returns {Chord}
 	 */
 	transposeChord(chord, options) {
+		const chordCopy = {...chord};
 		let arr = this.transposeFlat;
-		let i = arr.indexOf(chord.note);
+		let i = arr.indexOf(chordCopy.note);
 		if (i < 0) {
 			arr = this.transposeSharp;
-			i = arr.indexOf(chord.note);
+			i = arr.indexOf(chordCopy.note);
 		}
 		if (i >= 0) {
 			i += (options.transpose % 12);
 			if (i < 0)
 				i += 12;
-			chord.note = arr[i];
-			if (options.useH && chord.note === "B")
-				chord.note = "H";
+			chordCopy.note = arr[i];
+			if (options.useH && chordCopy.note === "B")
+				chordCopy.note = "H";
 		}
-		if (chord.modifiers.includes("-")) {
+		if (chordCopy.modifiers.includes("-")) {
 			switch (options.minor) {
 				case "small":
-					let note = chord.note[0].toLowerCase();
-					if (chord.note[1])
-						note += chord.note[1];
-					chord.note = note;
-					chord.modifiers = chord.modifiers.replace("-", "");
+					let note = chordCopy.note[0].toLowerCase();
+					if (chordCopy.note[1])
+						note += chordCopy.note[1];
+					chordCopy.note = note;
+					chordCopy.modifiers = chordCopy.modifiers.replace("-", "");
 					break;
 				case "m":
-					chord.modifiers = chord.modifiers.replace("-", "m");
+					chordCopy.modifiers = chordCopy.modifiers.replace("-", "m");
 					break;
 			}
 		}
 		if (chord.alternate)
-			this.transposeChord(chord.alternate, options);
+			chordCopy.alternate = this.transposeChord(chord.alternate, options);
 		if (chord.over)
-			this.transposeChord(chord.over, options);
+			chordCopy.over = this.transposeChord(chord.over, options);
+		return chordCopy;
 	}
 }
