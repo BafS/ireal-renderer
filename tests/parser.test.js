@@ -1,6 +1,6 @@
 import test from 'ava';
 import fs from 'fs';
-import { Parser, Playlist } from '../src/parser.js';
+import { Playlist } from '../src/parser.js';
 import { Transposer } from '../src/renderer.js';
 
 /**
@@ -19,6 +19,7 @@ test('Parse playlist info with a single song', t => {
     t.is(playlist.songs[0].composer, 'Pat Metheny');
     t.is(playlist.songs[0].key, 'D');
     t.is(playlist.songs[0].style, 'Even 8ths');
+    t.is(playlist.songs[0].groove, '');
     t.is(playlist.songs[0].transpose, 0);
     t.is(playlist.songs[0].repeats, 3);
     t.is(playlist.songs[0].bpm, 0); // Fixme
@@ -58,8 +59,6 @@ test('Parses a song', t => {
     const playlist = new Playlist(readContent('Bright Size Life.html'));
 
     var song = playlist.songs[0];
-    const parser = new Parser();
-    parser.parse(song);
 
     // Cells with chords, annotations, comments, or spacers
     const mainCells = song.cells.filter(cell =>
@@ -74,7 +73,7 @@ test('Parses a song', t => {
     t.is(mainCells[1].chord.note, 'x'); // empty cell
 
     t.is(mainCells[2].chord.note, 'Bb');
-    t.is(mainCells[2].chord.modifiers, '^7♯11');
+    t.is(mainCells[2].chord.modifiers, '^7#11');
     t.is(mainCells[2].bars, '(');
 
     t.is(mainCells[3].chord.note, 'x');
@@ -99,10 +98,7 @@ test('Parses songs in a playlist', t => {
         cell.chord !== null || cell.annots.length > 0 || cell.comments.length > 0 || cell.spacer > 0
     );
 
-    const parser = new Parser();
-
     const song1 = playlist.songs[0];
-    parser.parse(song1);
 
     const mainCells1 = mainCells(song1);
     t.is(mainCells1.length, 46);
@@ -124,7 +120,7 @@ test('Parses songs in a playlist', t => {
     t.is(mainCells1[4].bars, '(');
 
     t.is(mainCells1[5].chord.note, 'Bb');
-    t.is(mainCells1[5].chord.modifiers, '7♯5');
+    t.is(mainCells1[5].chord.modifiers, '7#5');
     t.is(mainCells1[5].chord.alternate.note, 'F');
     t.is(mainCells1[5].annots.length, 0);
     t.is(mainCells1[5].spacer, 0);
@@ -132,7 +128,6 @@ test('Parses songs in a playlist', t => {
 
 
     const song4 = playlist.songs[3];
-    parser.parse(song4);
     const mainCells4 = mainCells(song4);
 
     t.is(mainCells4.length, 53);
@@ -152,12 +147,8 @@ test('Parses songs in a playlist', t => {
 
 test('Test transposer', t => {
     const playlist = new Playlist(readContent('DemoPlaylist.html'));
-    const parser = new Parser();
     const song1 = playlist.songs[0];
-    parser.parse(song1);
-
     const song4 = playlist.songs[3];
-    parser.parse(song4);
 
     t.is(song1.key, 'Eb');
     t.is(song1.cells[0].chord.note, 'F');
