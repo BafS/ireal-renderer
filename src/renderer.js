@@ -298,16 +298,14 @@ Renderer.classes = {
 };
 
 export class Transposer {
-	constructor() {
-		this.transposeFlat = [
-			"C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B",
-			"C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"
-		];
-		this.transposeSharp = [
-			"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B",
-			"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"
-		];
-	}
+	static transposeFlat = [
+		"C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B",
+		"C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"
+	];
+	static transposeSharp = [
+		"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B",
+		"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"
+	];
 
 	/**
 	 * Transpose a song. Use the following options:
@@ -320,7 +318,7 @@ export class Transposer {
 	 * useH:
 	 *   use H for B chords
 	 * @param {Song} song
-	 * @param {Object<string, any>} options
+	 * @param {{transpose: number, minor: 'm'|'small', useH: boolean}} options
 	 * @returns {Song}
 	 */
 	transpose(song, options) {
@@ -348,31 +346,34 @@ export class Transposer {
 	/**
 	 * Transpose the given chord; use the given options.
 	 * @param {Chord} chord
-	 * @param {Object<string, any>} options
+	 * @param {{transpose: number, minor: 'm'|'small', useH: boolean}} options
 	 * @returns {Chord}
 	 */
 	transposeChord(chord, options) {
 		const chordCopy = {...chord};
-		let arr = this.transposeFlat;
+		let arr = Transposer.transposeFlat;
 		let i = arr.indexOf(chordCopy.note);
 		if (i < 0) {
-			arr = this.transposeSharp;
+			arr = Transposer.transposeSharp;
 			i = arr.indexOf(chordCopy.note);
 		}
 		if (i >= 0) {
 			i += (options.transpose % 12);
-			if (i < 0)
+			if (i < 0) {
 				i += 12;
+			}
 			chordCopy.note = arr[i];
-			if (options.useH && chordCopy.note === "B")
+			if (options.useH && chordCopy.note === "B") {
 				chordCopy.note = "H";
+			}
 		}
 		if (chordCopy.modifiers.includes("-")) {
 			switch (options.minor) {
 				case "small":
 					let note = chordCopy.note[0].toLowerCase();
-					if (chordCopy.note[1])
+					if (chordCopy.note[1]) {
 						note += chordCopy.note[1];
+					}
 					chordCopy.note = note;
 					chordCopy.modifiers = chordCopy.modifiers.replace("-", "");
 					break;
@@ -381,10 +382,11 @@ export class Transposer {
 					break;
 			}
 		}
-		if (chord.alternate)
+		if (chord.alternate) {
 			chordCopy.alternate = this.transposeChord(chord.alternate, options);
-		if (chord.over)
+		} if (chord.over) {
 			chordCopy.over = this.transposeChord(chord.over, options);
+		}
 		return chordCopy;
 	}
 }
