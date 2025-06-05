@@ -1,12 +1,21 @@
-/*
-CSS file for demo.html.
-*/
+:root {
+  --background-color: #ffffff;
+  --text-color: #333333;
+  --border-color: #ccc;
+  --hover-color: #f0f0f0;
+}
 
 body {
 	font-family: Helvetica, swiss;
+	margin: 0;
 }
-h3 {
+#page h3 {
 	text-align: center;
+	max-width: 60%;
+	margin-left: 20%;
+}
+#page h5 {
+	text-align: right;
 }
 label {
 	width: 200px;
@@ -15,16 +24,20 @@ td {
 	padding: 5px;
 }
 option {
-	background-color: #eee;
-	border: 1px solid grey;
-	padding: 3px;
-	margin: 2px;
+	background-color: #f2f2f2;
+	border: 1px solid #bbb;
+	padding: 3px 4px;
+	margin: 1px;
+	margin-right: 2px;
 }
 
 #ui {
 	display: flex;
 	width: 100%;
 	margin-bottom: 20px;
+	background: #f8f8f8;
+	padding: 10px 12px;
+	box-sizing: border-box;
 }
 
 #left-box, #right-box {
@@ -42,9 +55,9 @@ option {
 }
 
 #songs {
-   height: 8em;
+   height: 10em;
    width: calc(100% - 10px);
-   margin: 5px;
+   margin: 2px 0;
 }
 
 #songs:focus {
@@ -65,7 +78,7 @@ option {
     margin-right: 5px;
 }
 
-.song-columns>div {
+.song-columns > div {
 	display: inline-block;
 	position:relative;
 	float:left;
@@ -128,12 +141,45 @@ option {
 	width: 21cm;
 	margin-left: auto;
 	margin-right: auto;
-	background:floralwhite;
-	border: 1px solid #ccc;
-	-webkit-box-shadow: 10px 10px 5px 0px rgba(204,198,204,1);
-	-moz-box-shadow: 10px 10px 5px 0px rgba(204,198,204,1);
-	box-shadow: 10px 10px 5px 0px rgba(204,198,204,1);
+	margin-bottom: 1rem;
+	background: var(--background-color);
+	color: var(--text-color);
+	border: 1px solid var(--border-color);
+	box-shadow: 4px 4px rgba(0,0,0,.15);
     padding: 10mm 10mm 10mm 20mm;
+}
+
+#page .song-info {
+	opacity: 0.8;
+	font-size: 65%;
+	align-self: center;
+	align-items: center;
+	float: left;
+	width: 18%;
+	margin: 0 auto;
+	margin-left: -10px;
+	margin-top: -75px;
+	display: flex;
+	justify-content: space-between;
+	box-sizing: border-box;
+	flex-wrap: wrap;
+}
+
+#page .song-info span {
+	padding: 5px 0;
+	display: inline-block;
+	width: 30%;
+	line-height: 1;
+}
+
+#page .song-info span:last-child {
+	flex-basis: 100%;
+}
+
+#page .song-info label {
+	color: #666;
+	font-size: 60%;
+	display: inline-block;
 }
 
 @media print {
@@ -145,9 +191,11 @@ option {
 		width: inherit;
 		height: inherit;
 		border: none;
-		-webkit-box-shadow: none;
-		-moz-box-shadow: none;
 		box-shadow: none;
 		padding: 0;
+	}
+
+	#page .song-info {
+		display: none;
 	}
 }

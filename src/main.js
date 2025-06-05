@@ -1,6 +1,7 @@
 import demoPlaylist from '../DemoPlaylist.html?raw'
 import { Renderer, Transposer } from './renderer.js';
 import { Playlist } from './parser.js';
+import { tempoFromStyle } from './utils.js';
 
 window.addEventListener("load", async () => {
 
@@ -20,6 +21,7 @@ window.addEventListener("load", async () => {
 			lbHtml += `<option value="${i}">${playlist.songs[i].title}</option>`;
 			chordsHtml += `<div id="song-${i}"></div>`;
 		}
+		document.getElementById("playlist-name").innerHTML = playlist.name;
 		document.getElementById("songs").innerHTML = lbHtml;
 		document.getElementById("chords").innerHTML = chordsHtml;
 	}
@@ -32,9 +34,16 @@ window.addEventListener("load", async () => {
 		const transpose = new Transposer();
 		const song = transpose.transpose(playlist.songs[index], options);
 		const container = document.getElementById("song-" + index);
-		container.innerHTML = `<h3>${song.title} (${song.key
-			.replace(/b/g, "\u266d")
-			.replace(/#/g, "\u266f")})</h3><h5>${song.composer}</h5>`;
+		const tempo = song.bmp || tempoFromStyle(song.style);
+		console.log(song.style);
+		container.innerHTML = `<h3>${song.title}</h3>
+			<div class="song-info">
+				<span>${song.repeats}<label>Repeats</label></span>
+				<span>${tempo}<label>Tempo</label></span>
+				<span>${song.key.replace(/b/g, "\u266d").replace(/#/g, "\u266f")}<label>Key</label></span>
+				<span>${song.style}<label>Style</label></span>
+			</div>
+			<h5>${song.composer}</h5>`;
 		const r = new Renderer();
 		r.render(song, container, options);
 	}
@@ -43,10 +52,11 @@ window.addEventListener("load", async () => {
 		let selected = document.getElementById("songs").options;
 		selected = [...selected].filter(option => option.selected).map(el => +el.value);
 		for (let i = 0; i < playlist.songs.length; i++) {
-			if (selected.includes(i))
+			if (selected.includes(i)) {
 				renderSong(i);
-			else
+			} else {
 				document.getElementById(`song-${i}`).innerHTML = "";
+			}
 		}
 	}
 
