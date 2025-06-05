@@ -2,7 +2,7 @@
 
 ### Renders an iReal Pro playlist in an HTML page.
 
-[Click here to launch a live demo!](https://daumling.github.io/ireal-renderer/)
+[Click here to launch a live demo!](https://bafs.github.io/ireal-renderer/)
 
 #### Features
 
@@ -159,14 +159,14 @@ The Song class encapsulates an iReal Pro song. It has the following members:
 - `exStyle` - extended style (the style set with the drop-down in the lower left within iReal Pro)
 - `bpm` - the beats per minute if set explicitly
 - `repeats` - the number of repeats if set explicitly
-- `music` - the contents of the song that the iRealReader class renders
+- `music` - the contents of the song that the Reader class renders
 - `cells` - an array of cell tokens, filled in after a call to `iRealRenderer.parse()`.
 
 ### ireal-renderer
 
-#### class iRealRenderer
+#### class Renderer
 
-`new iRealReader()`
+`new Reader()`
 
 The constructor does not take any arguments.
 
@@ -197,11 +197,11 @@ Render the song into the given HTML container element using the supplied options
 only the `hilite` option is supported (see above). Set the container's font size to 
 scale the output.
 
-#### class iRealToken
+#### class Token
 
 This class encapsulates a cell token. It contains these properties:
 
-- `chord` - if non-null, a `iRealChord` object containing the main chord
+- `chord` - if non-null, a `Chord` object containing the main chord
 - `comments` - an array of comment strings; these strings may begin with "*nn",
 where "nn" is a vertical displacement value of approximately 1/20 em per unit.
 - `annots` - a string of annotations:

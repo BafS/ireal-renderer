@@ -4,6 +4,11 @@
 @import 'style.css';
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans+Condensed:wght@700&display=swap');
 
+:root {
+	--accent-color: red;
+	--accent-background-color: #fcc;
+}
+
 irr-char, irr-lbar, irr-rbar, irr-measure, irr-annot {
 	font-family: iRealFont;
 	margin-top: 0.2em;
@@ -16,6 +21,7 @@ irr-char, irr-lbar, irr-rbar, irr-measure, irr-annot {
 /* Outer container; if attribute hilite is set, hiliting is active */
 irr-chords {
 	font-family: "Open Sans Condensed", sans-serif;
+	font-size: 150%;
 	box-sizing: border-box;
 	line-height:normal;
 	display: grid;
@@ -178,7 +184,7 @@ irr-annot {
 	left: 0.8em;
 }
 
-/* special elements like bars, repeats, coda, measure etc 
+/* special elements like bars, repeats, coda, measure etc
    are painted red if the hilite attribute is set */
 
 irr-chords[hilite] irr-chord>irr-chord,
@@ -187,14 +193,14 @@ irr-chords[hilite] irr-annot,
 irr-chords[hilite] irr-repeat,
 irr-chords[hilite] irr-measure,
 irr-chords[hilite] irr-comment {
-	color: red !important;
+	color: var(--accent-color) !important;
 }
 irr-chords[hilite] irr-section{
-	background-color: #fcc;
+	background-color: var(--accent-background-color);
 }
 irr-chords[hilite] irr-repeat {
-	border-left-color: red;
-	border-top-color: red;
+	border-left-color: var(--accent-color);
+	border-top-color: var(--accent-color);
 }
 irr-chords[hilite] irr-char.irr-root {
 	color: lightblue !important;

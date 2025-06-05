@@ -2,7 +2,7 @@
 <html>
   <head>
 		<meta charset="UTF-8">
-		<title>iRealRenderer Demo</title>
+		<title>iRealRenderer</title>
 		<link rel="stylesheet" href="demo.css">
 		<link rel="stylesheet" href="css/ireal-renderer.css">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -10,13 +10,13 @@
 		<script type="module" src="/src/main.js"></script>
 	</head>
 	<body>
-		<h3>iRealRenderer Demo</h3>
 		<div id="ui">
 			<div id="left-box">
+				<span id="playlist-name"></span>
 				<select id="songs" multiple size="6"></select>
 			</div>
 			<div id="right-box">
-				<div style="width:45%">
+				<div style="width: 45%">
 					<label>Minor chords display:</label>
 					<div class="radio">
 					  <label><input type="radio" id="minus" name="minor" checked>Minus sign (Bb-)</label>
@@ -41,11 +41,11 @@
 					<tr><td>
 						<label for="ui-transpose">Transpose (half tones): </label>
 					</td><td>
-						<input id = "ui-transpose" type="number" value="0" min="-6" max="6" style="display:inline; width:60px">
+						<input id="ui-transpose" type="number" value="0" min="-6" max="6" style="display:inline; width:60px">
 					</tr><tr><td>
 						<label for="ui-fontsize">Font size: </label>
 					</td><td>
-						<input id = "ui-fontsize" type="number" value="16" min="4" max="256" style="display:inline; width:60px">
+						<input id="ui-fontsize" type="number" value="20" min="4" max="256" style="display:inline; width:60px">
 					</td></tr>
 					<tr><td colspan="2">
 						<label for="ui-file">Select iReal Pro playlist: </label>
@@ -55,7 +55,7 @@
 			</div>
 		</div>
 		<div id="page">
-			<div id="chords" style="font-size:16pt"></div>
+			<div id="chords" style="font-size:20pt"></div>
 		</div>
   </body>
 </html>
