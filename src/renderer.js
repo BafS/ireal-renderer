@@ -40,19 +40,31 @@ export class Renderer {
 		this.small = false;
 		this.hilite = hilite;
 
-		for (let i = 0; i < song.cells.length; i++) {
-			let cell = song.cells[i];
-			if (this.cell < 0 || this.cell === 15)
+		this.renderCells(song.cells, table);
+	}
+
+	/**
+	 * @private
+	 * @param {Cell[]} cells
+	 * @param {HTMLElement} table
+	 */
+	renderCells(cells, table) {
+		for (let i = 0; i < cells.length; i++) {
+			const cell = cells[i];
+			if (this.cell < 0 || this.cell === 15) {
 				this.nextRow(table, cell.spacer);
-			else
+			} else {
 				this.cell++;
+			}
 			let html = "";
-			if (cell.annots.length)
+			if (cell.annots.length) {
 				html += this.annotHtml(cell.annots);
-			if (cell.comments.length)
+			}
+			if (cell.comments.length) {
 				html += this.commentHtml(cell.comments);
+			}
 			html += this.cellHtml(cell);
-			let el = this.cells[this.cell];
+			const el = this.cells[this.cell];
 			let cls = "";
 			if (this.small)
 				cls += "small";
