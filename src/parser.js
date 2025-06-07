@@ -286,15 +286,15 @@ export class Song {
    * @returns {Chord}
    */
   parseChord(chord) {
-    var note = chord[1] || " ";
-    var modifiers = chord[2] || "";
-    var comment = chord[3] || "";
+    const note = chord[1] || " ";
+    const modifiers = chord[2] || "";
+    const comment = chord[3] || "";
     if (comment)
       modifiers += comment.substr(1, comment.length-2);
-    var over = chord[4] || "";
+    let over = chord[4] || "";
     if (over[0] === '/')
       over = over.substr(1);
-    var alternate = chord[5] || null;
+    let alternate = chord[5] || null;
     if (alternate) {
       chord = Song.chordRegex.exec(alternate.substr(1, alternate.length-2));
       if (!chord)
@@ -306,7 +306,7 @@ export class Song {
     if (note === " " && !alternate && !over)
       return null;
     if (over) {
-      var offset = (over[1] === '#' || over[1] === 'b') ? 2 : 1;
+      let offset = (over[1] === '#' || over[1] === 'b') ? 2 : 1;
       over = new Chord(over.substr(0, offset), over.substr(offset), null, null);
     }
     else
@@ -319,7 +319,7 @@ export class Song {
    * @returns {Cell}
    */
   newCell(cells) {
-    var obj = new Cell;
+    const obj = new Cell;
     cells.push(obj);
     return obj;
   }

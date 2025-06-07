@@ -79,14 +79,14 @@ Here is a function to render a song:
 ``` javascript
 function renderSong(playlist, index, container) {
     // transposing options
-    var options = {
+    const options = {
         minor: "minus",     // how to render minor chords
         transpose: 0,       // number of half tones to transpose
         useH: false,        // use "H" instead of "B"
         hilite: true        // use hiliting
     };
-    var song = playlist.songs[index];
-    var r = new iRealRenderer;
+    const song = playlist.songs[index];
+    const r = new iRealRenderer;
     r.parse(song);
     song = r.transpose(song, options);
     container.empty();

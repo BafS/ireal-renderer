@@ -25,9 +25,10 @@ export class Renderer {
 	render(song, container, options = {}) {
 		if (!song.cells)
 			return;
-		var hilite = options.hilite || false;
+		let hilite = options.hilite || false;
+		let table;
 		if (!this.isComponent) {
-			var table = document.createElement("irr-chords");
+			table = document.createElement("irr-chords");
 			if (hilite)
 				table.setAttribute("hilite", "");
 			container.appendChild(table);
@@ -39,20 +40,20 @@ export class Renderer {
 		this.small = false;
 		this.hilite = hilite;
 
-		for (var i = 0; i < song.cells.length; i++) {
-			var cell = song.cells[i];
+		for (let i = 0; i < song.cells.length; i++) {
+			let cell = song.cells[i];
 			if (this.cell < 0 || this.cell === 15)
 				this.nextRow(table, cell.spacer);
 			else
 				this.cell++;
-			var html = "";
+			let html = "";
 			if (cell.annots.length)
 				html += this.annotHtml(cell.annots);
 			if (cell.comments.length)
 				html += this.commentHtml(cell.comments);
 			html += this.cellHtml(cell);
-			var el = this.cells[this.cell];
-			var cls = "";
+			let el = this.cells[this.cell];
+			let cls = "";
 			if (this.small)
 				cls += "small";
 			if (cell.comments.length)
@@ -72,7 +73,7 @@ export class Renderer {
 	cellHtml(data) {
 		let html = "";
 		if (data.chord) html = this.chordHtml(data.chord);
-		for (var i = 0; i < data.bars.length; i++) {
+		for (let i = 0; i < data.bars.length; i++) {
 			const c = data.bars[i];
 			const cls = Renderer.classes[c];
 			switch(c) {
@@ -164,8 +165,8 @@ export class Renderer {
 					t += `<irr-annot class="${Renderer.classes[annot[0]]}"></irr-annot>`;
 					break;
 				case 'T':	// measure: Txx, where T12 is 12/8
-					var m1 = annot.charCodeAt(1) - 48;
-					var m2 = annot.charCodeAt(2) - 48;
+					let m1 = annot.charCodeAt(1) - 48;
+					let m2 = annot.charCodeAt(2) - 48;
 					if (m1 === 1 && m2 === 2)
 						m1 = 12, m2 = 8;
 					s = `<irr-measure><span class="Measure-${m1}-Low"></span><br/><span class="Measure-${m2}-High"></span></irr-measure>`;
@@ -213,13 +214,13 @@ export class Renderer {
 		this.checkIfNeedsLastBar();
 		// insert a spacer
 		if (spacer) {
-			var spc = document.createElement("irr-spacer");
+			let spc = document.createElement("irr-spacer");
 			spc.setAttribute("style", `height:${spacer*10}px`);
 			table.appendChild(spc);
 		}
 		this.cells = [];
 		for (let i = 0; i < 16; i++) {
-			var cell  = document.createElement("irr-cell");
+			let cell  = document.createElement("irr-cell");
 			this.cells.push(cell);
 			table.appendChild(cell);
 		}
@@ -239,7 +240,7 @@ export class Renderer {
 		if (!this.closebar)
 			return;
 		const curCell = this.cells[this.cell];
-		var bar = document.createElement("irr-rbar");
+		let bar = document.createElement("irr-rbar");
 		bar.classList.add("Single-Barline");
 		curCell.insertBefore(bar, curCell.firstChild);	// must insert, not append, for correct positioning
 	}

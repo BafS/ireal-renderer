@@ -58,7 +58,7 @@ test('Parse playlist info with multiple songs', t => {
 test('Parses a song', t => {
     const playlist = new Playlist(readContent('Bright Size Life.html'));
 
-    var song = playlist.songs[0];
+    const song = playlist.songs[0];
 
     // Cells with chords, annotations, comments, or spacers
     const mainCells = song.cells.filter(cell =>
