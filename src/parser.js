@@ -185,12 +185,12 @@ export class Song {
           found = true;
           if (match.length <= 2) {
             arr.push(match[0]);
-            text = text.substr(match[0].length);
+            text = text.substring(match[0].length);
           }
           else {
             // a chord
             arr.push(match);
-            text = text.substr(match[0].length);
+            text = text.substring(match[0].length);
           }
           break;
         }
@@ -199,7 +199,7 @@ export class Song {
         // ignore the comma separator
         if (text[0] !== ',')
           arr.push(text[0]);
-        text = text.substr(1);
+        text = text.substring(1);
       }
     }
 
@@ -246,7 +246,7 @@ export class Song {
           obj.chord = new Chord(cell);
           break;
         case '<':
-          cell = cell.substr(1, cell.length-2);
+          cell = cell.substring(1, cell.length-1);
           obj.comments.push(cell);
           cell = null; break;
         default:
@@ -287,27 +287,24 @@ export class Song {
    */
   parseChord(chord) {
     const note = chord[1] || " ";
-    const modifiers = chord[2] || "";
+    let modifiers = chord[2] || "";
     const comment = chord[3] || "";
     if (comment)
-      modifiers += comment.substr(1, comment.length-2);
+      modifiers += comment.substring(1, comment.length-1);
     let over = chord[4] || "";
     if (over[0] === '/')
-      over = over.substr(1);
+      over = over.substring(1);
     let alternate = chord[5] || null;
     if (alternate) {
-      chord = Song.chordRegex.exec(alternate.substr(1, alternate.length-2));
-      if (!chord)
-        alternate = null;
-      else
-        alternate = this.parseChord(chord);
+      chord = Song.chordRegex.exec(alternate.substring(1, alternate.length-1));
+      alternate = chord ? this.parseChord(chord) : null;
     }
     // empty cell?
     if (note === " " && !alternate && !over)
       return null;
     if (over) {
       let offset = (over[1] === '#' || over[1] === 'b') ? 2 : 1;
-      over = new Chord(over.substr(0, offset), over.substr(offset), null, null);
+      over = new Chord(over.substring(0, offset), over.substring(offset), null, null);
     }
     else
       over = null;
