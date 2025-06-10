@@ -208,7 +208,7 @@ export class Renderer {
 			let offset = 0;
 			if (c[0] === '*') {
 				offset = (c.charCodeAt(1) - 48) * 10 + (c.charCodeAt(2) - 48);
-				c = c.substr(3);
+				c = c.substring(3);
 			}
 			// assume that 1 unit is = 1/20 em
 			offset /= 20;
@@ -338,7 +338,7 @@ export class Transposer {
 		const songCopy = {...song};
 		let chord = { note: songCopy.key, modifiers: "", over: null, alternate: null };
 		if (chord.note.endsWith("-")) {
-			chord.note = songCopy.key.substr(0, songCopy.key.length-1);
+			chord.note = songCopy.key.substring(0, songCopy.key.length-1);
 			chord.modifiers = "-";
 		}
 		options.transpose += song.transpose;
