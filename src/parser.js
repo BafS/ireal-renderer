@@ -55,10 +55,15 @@ export class Playlist {
 
 export class Cell {
   constructor() {
+    /** @type {string[]} */
     this.annots = [];
+    /** @type {string[]} */
     this.comments = [];
+    /** @type {'|' | '[' | ']' | '{' | '}' | 'Z'} */
     this.bars = "";
+    /** @type {number} */
     this.spacer = 0;
+    /** @type {Chord|null} */
     this.chord = null;
   }
 }
@@ -322,10 +327,15 @@ export class Song {
   }
 }
 
-// Unscrambling hints from https://github.com/ironss/accompaniser/blob/master/irealb_parser.lua
-// Strings are broken up in 50 character segments. each segment undergoes character substitution addressed by obfusc50()
-// Note that a final part of length 50 or 51 is not scrambled.
-// Finally need to substitute for Kcl, LZ and XyQ.
+
+/**
+ * Unscrambling hints from https://github.com/ironss/accompaniser/blob/master/irealb_parser.lua
+ * Strings are broken up in 50 character segments. each segment undergoes character substitution addressed by obfusc50()
+ * Note that a final part of length 50 or 51 is not scrambled.
+ * Finally need to substitute for Kcl, LZ and XyQ.
+ * @param {string} s
+ * @returns {string}
+ */
 function unscramble(s) {
   let r = '', p;
 
@@ -340,6 +350,10 @@ function unscramble(s) {
   return r;
 }
 
+/**
+ * @param {string} s
+ * @returns {string}
+ */
 function obfusc50(s) {
   // the first 5 characters are switched with the last 5
   const newString = s.split('');
